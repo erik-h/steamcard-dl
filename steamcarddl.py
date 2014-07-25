@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 
 def downloadImage(gameName, imageName, url):
 
-	 
 
 	#file_name = url.split('/')[-1]
 	file_name = "{0} - {1}{2}".format(gameName, imageName, url[url.rfind("."):])
@@ -64,12 +63,16 @@ def main():
 
 		cards = soup.findAll("div", {"class":"showcase-element-card"})
 
+		alreadyDoneLinks = []
+
 		for card in cards:	
 			# this part is ugly..I'll clean it up later
 			try:
 				hdImageLink = card.find("a", {"class":"card-image-link"}).get("href")
 				hdImageName = card.find("span", {"class":"card-name"}).text
-				downloadImage(key, hdImageName, hdImageLink)
+				if not hdImageLink in alreadyDoneLinks:
+					downloadImage(key, hdImageName, hdImageLink)
+					alreadyDoneLinks.append(hdImageLink)
 				#print "hdImageLink = {0}".format(hdImageLink)
 				#print "hdImageName = {0}".format(hdImageName)
 			except Exception:
