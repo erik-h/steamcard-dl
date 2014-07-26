@@ -12,5 +12,5 @@ Updates:
 ===============================
 
 This script will continue to be updated with any requests people have.
-At the moment, my todo looks like:
-* Add downloading of background images (currently the script only downloads the HD card images, not the background images as well)
+At the moment, my todo looks like (check marked are past items now completed):
+- [x] Add downloading of background images (currently the script only downloads the HD card images, not the background images as well)
