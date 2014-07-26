@@ -46,7 +46,7 @@ def downloadImage(gameName, imageName, url, fType):
 
 	if isBg:
 		bgFileType = imghdr.what(file_name)
-		os.rename(file_name, file_name + ".".format(bgFileType))
+		os.rename(file_name, file_name + ".{0}".format(bgFileType))
 
 
 def main():
