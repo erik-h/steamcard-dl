@@ -8,6 +8,8 @@ Requirements
 
 [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/) - To parse the html
 
+_NOTE:_ I have only run this with Python 2.7.6 . It should work with other versions, but again I haven't tested it out.
+
 Usage
 ===
 Operating System | Syntax
