@@ -3,12 +3,25 @@
 import urllib2
 import sys
 from bs4 import BeautifulSoup
+import time
+import imghdr
+import os
+import re
 
-def downloadImage(gameName, imageName, url):
+def downloadImage(gameName, imageName, url, fType):
 
+	isBg = False
+
+	imageName = imageName[:imageName.find("-")-1]
 
 	#file_name = url.split('/')[-1]
-	file_name = "{0} - {1}{2}".format(gameName, imageName, url[url.rfind("."):])
+	if fType == "card":
+		file_name = "{0} - {1}{2}".format(gameName, imageName, url[url.rfind("."):])
+
+	else: # fType == bg
+		file_name = "{0} - {1}".format(gameName, imageName)
+		isBg = True
+
 	u = urllib2.urlopen(url)
 	f = open(file_name, 'wb')
 	meta = u.info()
@@ -26,9 +39,14 @@ def downloadImage(gameName, imageName, url):
 		f.write(buffer)
 		status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
 		status = status + chr(8)*(len(status)+1)
-		print status,
+		print status,	
+	
 
 	f.close()
+
+	if isBg:
+		bgFileType = imghdr.what(file_name)
+		os.rename(file_name, file_name + ".".format(bgFileType))
 
 
 def main():
@@ -63,20 +81,39 @@ def main():
 
 		cards = soup.findAll("div", {"class":"showcase-element-card"})
 
-		alreadyDoneLinks = []
+		hdBgrounds = soup.findAll("div", {"class":"showcase-element-background"})
+
+		alreadyDoneCardLinks = []
+		alreadyDoneBgLinks = []
 
 		for card in cards:	
 			# this part is ugly..I'll clean it up later
 			try:
 				hdImageLink = card.find("a", {"class":"card-image-link"}).get("href")
-				hdImageName = card.find("span", {"class":"card-name"}).text
-				if not hdImageLink in alreadyDoneLinks:
-					downloadImage(key, hdImageName, hdImageLink)
-					alreadyDoneLinks.append(hdImageLink)
+				hdImageName = card.findAll("a")[1].get("title")# hdImageName = card.find("span", {"class":"card-name"}).text
+				if not hdImageLink in alreadyDoneCardLinks:
+					downloadImage(key, hdImageName, hdImageLink, "card")
+					alreadyDoneCardLinks.append(hdImageLink)
 				#print "hdImageLink = {0}".format(hdImageLink)
 				#print "hdImageName = {0}".format(hdImageName)
-			except Exception:
+			except Exception as e:
+				#print "card ERROR {0}".format(str(e))
+				time.sleep(1)
 				continue
+
+		for hdBg in hdBgrounds:
+			#print "DL A BACKGROUND:"
+			try:
+				hdBgLink = hdBg.find("a", {"class":"background-hd-link"}).get("href")
+				hdBgName = hdBg.findAll("a")[2].get("title")# hdBgName = hdBg.find("span", {"class":"background-name"}).text
+				if not hdBgLink in alreadyDoneBgLinks:
+					downloadImage(key, hdBgName, hdBgLink, "bg")
+					alreadyDoneBgLinks.append(hdBgLink)
+			except Exception as e:
+				#print "background ERROR: {0}".format(str(e))
+				time.sleep(1)
+				continue
+	
 	
 
 	#print "Size of gamesDict = {0}".format(len(gamesDict))
