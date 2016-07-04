@@ -15,7 +15,7 @@ Usage
 Operating System | Syntax
 -----------------|-------
 Linux            | ```./steamcarddl.py``` or ```python steamcarddl.py``` in a terminal
-OSX              | I'm not very familiar with OSX but I believe just ```python steamcarddl.py``` should work
+OSX            | ```./steamcarddl.py``` or ```python steamcarddl.py``` in a terminal
 Windows          | ```python steamcarddl.py``` in a command prompt 
 
 Updates
