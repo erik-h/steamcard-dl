@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# TODO: Use urllib2.HTTPCookieProcessor to fix redirect infinite loop
+# See: http://stackoverflow.com/a/22567206
 import urllib2
 import sys
 from bs4 import BeautifulSoup
@@ -55,6 +57,7 @@ def main():
     gamesDict = {}
 
     for filterURL in categoryURLList:
+        print "Grabbing {}".format(BASEURL + filterURL)
         page = urllib2.urlopen(BASEURL + filterURL)
         soup = BeautifulSoup(page.read())
 
