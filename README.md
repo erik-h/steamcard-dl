@@ -1,7 +1,7 @@
 steamcard-dl
 ===============================
 
-This python script downloads all the steam card wallpapers and backgrounds via http://www.steam.cards/
+A python script which downloads all the steam card wallpapers and backgrounds via http://www.steam.cards/
 
 Requirements
 ===============================
