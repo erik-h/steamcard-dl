@@ -59,7 +59,7 @@ def main():
     for filterURL in categoryURLList:
         print("Grabbing {}".format(BASEURL + filterURL))
         page = urllib.request.urlopen(BASEURL + filterURL)
-        soup = BeautifulSoup(page.read())
+        soup = BeautifulSoup(page.read(), "html.parser")
 
         games = soup.findAll("div", attrs={"class":"showcase-game-item"})
 
@@ -76,7 +76,7 @@ def main():
     for key in sorted(gamesDict.keys()):
         # print "{0}: {1}".format(key.encode("utf-8"), gamesDict[key].encode("utf-8"))
         page = urllib.request.urlopen("http://www.steamcardexchange.net/" + gamesDict[key])
-        soup = BeautifulSoup(page.read())
+        soup = BeautifulSoup(page.read(), "html.parser")
 
         cards = soup.findAll("div", {"class":"showcase-element-card"})
 
