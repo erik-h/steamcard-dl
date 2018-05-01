@@ -2,7 +2,7 @@
 
 # TODO: Use urllib2.HTTPCookieProcessor to fix redirect infinite loop
 # See: http://stackoverflow.com/a/22567206
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import sys
 from bs4 import BeautifulSoup
 import time
@@ -23,11 +23,11 @@ def downloadImage(gameName, imageName, url, fType):
         file_name = "{0} - {1}".format(gameName, imageName)
         isBg = True
 
-    u = urllib2.urlopen(url)
+    u = urllib.request.urlopen(url)
     f = open(file_name, 'wb')
     meta = u.info()
     file_size = int(meta.getheaders("Content-Length")[0])
-    print "Downloading: %s Bytes: %s" % (file_name, file_size)
+    print("Downloading: %s Bytes: %s" % (file_name, file_size))
 
     file_size_dl = 0
     block_sz = 8192
@@ -41,7 +41,7 @@ def downloadImage(gameName, imageName, url, fType):
         f.write(buffer)
         status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
         status = status + chr(8)*(len(status)+1)
-        print status,
+        print(status, end=' ')
 
     f.close()
 
@@ -57,8 +57,8 @@ def main():
     gamesDict = {}
 
     for filterURL in categoryURLList:
-        print "Grabbing {}".format(BASEURL + filterURL)
-        page = urllib2.urlopen(BASEURL + filterURL)
+        print("Grabbing {}".format(BASEURL + filterURL))
+        page = urllib.request.urlopen(BASEURL + filterURL)
         soup = BeautifulSoup(page.read())
 
         games = soup.findAll("div", attrs={"class":"showcase-game-item"})
@@ -75,7 +75,7 @@ def main():
 
     for key in sorted(gamesDict.keys()):
         # print "{0}: {1}".format(key.encode("utf-8"), gamesDict[key].encode("utf-8"))
-        page = urllib2.urlopen("http://www.steamcardexchange.net/" + gamesDict[key])
+        page = urllib.request.urlopen("http://www.steamcardexchange.net/" + gamesDict[key])
         soup = BeautifulSoup(page.read())
 
         cards = soup.findAll("div", {"class":"showcase-element-card"})
@@ -116,5 +116,5 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print "\nStopping..."
+        print("\nStopping...")
         sys.exit(0)
